@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+cd_into_content_dir ()
+{
+    [ -d *.egg-info ] \
+        || { echo 'Please install the package first using `pip install -e .`'; exit 1; }
+    egg_info=$(ls -d *.egg-info)
+    PACKAGE_NAME=${egg_info%.*}
+    [ -d $PACKAGE_NAME ] \
+        && { cd $PACKAGE_NAME; } \
+        || { echo 'Package does not exist.'; }
+}
+
+cd_into_segments_dir ()
+{
+    [ -d segments ] \
+        && { cd segments; } \
+        || { echo 'There is no segments directory.'; exit 1; }
+}
+
+run_definition ()
+{
+    python definition.py
+}
+
+make_required_segments ()
+{
+    [ $# -lt 1 ] \
+        && { segments=(*); } \
+        || { segments=($@); }
+    for segment in ${segments[*]}
+    do
+        [[ "$segment" != _* ]] \
+            && (seg=${segment%/*}; echo "making segment" "$seg"; cd $seg; pwd)
+    done
+}
+
+cd_into_content_dir
+cd_into_segments_dir
+make_required_segments $@
