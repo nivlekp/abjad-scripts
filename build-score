@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+source path-nevigation
+
+cd_from_scr_to_wrapper_dir
+cd_into_content_dir
+cd_into_score_dir
+lilypond score.ly
+open score.pdf

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+source path-nevigation
+
+open_required_segments ()
+{
+    [ $# -lt 1 ] \
+        && { segments=(*); } \
+        || { segments=($@); }
+    for segment in ${segments[*]}
+    do
+        [[ "$segment" != _* ]] \
+            && (seg=${segment%/*}; echo "making segment" "$seg"; cd $seg; open illustration.pdf)
+    done
+}
+
+cd_from_scr_to_wrapper_dir
+cd_into_content_dir
+cd_into_segments_dir
+open_required_segments $@

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+source path-nevigation
+
+make_required_pdf ()
+{
+    [ $# -lt 1 ] \
+        && { segments=(*); } \
+        || { segments=($@); }
+    for segment in ${segments[*]}
+    do
+        [[ "$segment" != _* ]] \
+            && (seg=${segment%/*}; echo "rendering segment" "$seg"; cd $seg; lilypond illustration.ly)
+    done
+}
+
+cd_from_scr_to_wrapper_dir
+cd_into_content_dir
+cd_into_segments_dir
+make_required_pdf $@

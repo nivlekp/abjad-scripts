@@ -7,6 +7,11 @@ run_definition ()
     python definition.py
 }
 
+mv_seg_to_builds ()
+{
+    mv build.ly "../../builds/score/_segments/$seg.ly"
+}
+
 make_required_segments ()
 {
     [ $# -lt 1 ] \
@@ -15,7 +20,7 @@ make_required_segments ()
     for segment in ${segments[*]}
     do
         [[ "$segment" != _* ]] \
-            && (seg=${segment%/*}; echo "making segment" "$seg"; cd $seg; pwd)
+            && (seg=${segment%/*}; echo "making segment" "$seg"; cd $seg; run_definition; mv_seg_to_builds)
     done
 }
 

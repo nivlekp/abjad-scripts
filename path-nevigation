@@ -22,3 +22,17 @@ cd_into_segments_dir ()
         && { cd segments; } \
         || { echo 'There is no segments directory.'; exit 1; }
 }
+
+cd_into_builds_dir ()
+{
+    [ -d builds ] \
+        && { cd builds; } \
+        || { echo 'There is no builds directory.'; exit 1; }
+}
+
+cd_into_score_dir ()
+{
+    [ -d builds/score ] \
+        && { cd builds/score; } \
+        || { echo 'There is no builds/score directory.'; exit 1; }
+}
