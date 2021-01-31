@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+cd_from_scr_to_wrapper_dir ()
+{
+    cd ..
+}
+
+cd_into_content_dir ()
+{
+    [ -d *.egg-info ] \
+        || { echo 'Please install the package first using `pip install -e .`'; exit 1; }
+    egg_info=$(ls -d *.egg-info)
+    PACKAGE_NAME=${egg_info%.*}
+    [ -d $PACKAGE_NAME ] \
+        && { cd $PACKAGE_NAME; } \
+        || { echo 'Package does not exist.'; }
+}
+
+cd_into_segments_dir ()
+{
+    [ -d segments ] \
+        && { cd segments; } \
+        || { echo 'There is no segments directory.'; exit 1; }
+}
