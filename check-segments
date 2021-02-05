@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+source path-nevigation
+
+run_definition ()
+{
+    python definition.py
+}
+
+check_required_segments ()
+{
+    [ $# -lt 1 ] \
+        && { segments=(*); } \
+        || { segments=($@); }
+    for segment in ${segments[*]}
+    do
+        [[ "$segment" != _* ]] \
+            && (seg=${segment%/*}; \
+                echo "checking segment" "$seg"; \
+                cd $seg; \
+                mv illustration.ly old.ly
+                run_definition; \
+                cmp -s old.ly illustration.ly \
+                    && { echo 'All good!'; rm old.ly; rm build.ly; } \
+                    || { diff old.ly illustration.ly; mv old.ly illustration.ly; rm build.ly; })
+    done
+}
+
+cd_from_scr_to_wrapper_dir
+cd_into_content_dir
+cd_into_segments_dir
+check_required_segments $@
