@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+source path-nevigation
+
+run_definition ()
+{
+    python -c "\
+exec(open('definition.py').read())
+import abjad
+with open('illustration.ly', 'w') as ly_file:
+    ly_file.write(abjad.lilypond(lilypond_file))
+with open('build.ly', 'w') as build_file:
+    build_file.write(abjad.lilypond(lilypond_file.items[0]))"
+}
+
+mv_seg_to_builds ()
+{
+    mv build.ly "../../builds/score/_segments/$seg.ly"
+}
+
+make_required_segments ()
+{
+    [ $# -lt 1 ] \
+        && { segments=(*); } \
+        || { segments=($@); }
+    for segment in ${segments[*]}
+    do
+        [[ "$segment" != _* ]] \
+            && (seg=${segment%/*}; echo "making segment" "$seg"; cd $seg; run_definition; mv_seg_to_builds)
+    done
+}
+
+cd_from_scr_to_wrapper_dir
+cd_into_content_dir
+cd_into_segments_dir
+make_required_segments $@
