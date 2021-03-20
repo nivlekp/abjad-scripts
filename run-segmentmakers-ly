@@ -7,6 +7,7 @@ run_definition ()
     python -c "\
 exec(open('definition.py').read())
 import abjad
+lilypond_file = maker.run()
 with open('illustration.ly', 'w') as ly_file:
     ly_file.write(abjad.lilypond(lilypond_file))
 with open('build.ly', 'w') as build_file:
