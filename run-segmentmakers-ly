@@ -7,11 +7,23 @@ run_definition ()
     python -c "\
 exec(open('definition.py').read())
 import abjad
-lilypond_file = maker.run()
+current_segment = maker.segment_name
+previous_segment = chr(ord(current_segment) - 1)
+try:
+    exec(open(f'../{previous_segment}/__metadata__.py').read())
+    lilypond_file = maker.run(previous_metadata=metadata)
+except:
+    lilypond_file = maker.run()
 with open('illustration.ly', 'w') as ly_file:
     ly_file.write(abjad.lilypond(lilypond_file))
 with open('build.ly', 'w') as build_file:
-    build_file.write(abjad.lilypond(lilypond_file.items[0]))"
+    build_file.write(abjad.lilypond(lilypond_file.items[0]))
+with open('__metadata__.py', 'w') as metadata_file:
+    metadata_string = 'import abjad\\n\\n'
+    metadata_string += 'metadata = '
+    metadata_string += abjad.storage(maker.metadata)
+    metadata_file.write(metadata_string)"
+    black __metadata__.py
 }
 
 mv_seg_to_builds ()
