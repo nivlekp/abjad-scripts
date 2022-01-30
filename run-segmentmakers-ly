@@ -17,7 +17,7 @@ except:
 with open('illustration.ly', 'w') as ly_file:
     ly_file.write(abjad.lilypond(lilypond_file))
 with open('build.ly', 'w') as build_file:
-    build_file.write(abjad.lilypond(maker.build_file.items[0]))
+    build_file.write(abjad.lilypond(maker.build_file.items[-1]))
 with open('__metadata__.py', 'w') as metadata_file:
     metadata_string = 'import abjad\\n\\n'
     metadata_string += 'metadata = '
