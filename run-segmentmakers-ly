@@ -6,6 +6,7 @@ run_definition ()
 {
     python -c "\
 exec(open('definition.py').read())
+import json
 import abjad
 current_segment = maker.segment_name
 previous_segment = chr(ord(current_segment) - 1)
@@ -18,12 +19,8 @@ with open('illustration.ly', 'w') as ly_file:
     ly_file.write(abjad.lilypond(lilypond_file))
 with open('build.ly', 'w') as build_file:
     build_file.write(abjad.lilypond(maker.build_file.items[-1]))
-with open('__metadata__.py', 'w') as metadata_file:
-    metadata_string = 'import abjad\\n\\n'
-    metadata_string += 'metadata = '
-    metadata_string += abjad.storage(maker.metadata)
-    metadata_file.write(metadata_string)"
-    black __metadata__.py
+with open('__metadata__.json', 'w') as metadata_file:
+    json.dump(maker.metadata, metadata_file)"
 }
 
 mv_seg_to_builds ()
